@@ -19,9 +19,41 @@ let lastTime = performance.now()
 let springingBack = false
 let zoomInOnLoad = true
 let zoomStartTime = 0
+let springBackTimeout = null
+let pointerWasDown = false
+const SPRING_BACK_DELAY = 200
 const zoomEndPos = new THREE.Vector3(0, ZOOM_END_DISTANCE, ZOOM_END_DISTANCE)
 const springPosVel = new THREE.Vector3()
 const springTargetVel = new THREE.Vector3()
+
+function triggerSpringBack() {
+    if (springBackTimeout) clearTimeout(springBackTimeout)
+    springBackTimeout = null
+    springingBack = true
+    springPosVel.set(0, 0, 0)
+    springTargetVel.set(0, 0, 0)
+}
+
+function scheduleSpringBack() {
+    if (pointerWasDown) {
+        pointerWasDown = false
+        triggerSpringBack()
+        return
+    }
+    if (springBackTimeout) clearTimeout(springBackTimeout)
+    springBackTimeout = setTimeout(() => {
+        springBackTimeout = null
+        triggerSpringBack()
+    }, SPRING_BACK_DELAY)
+}
+
+function cancelSpringBackSchedule() {
+    if (springBackTimeout) {
+        clearTimeout(springBackTimeout)
+        springBackTimeout = null
+    }
+    springingBack = false
+}
 
 function initThree() {
     canvas = document.querySelector('#canvas')
@@ -42,17 +74,19 @@ function initThree() {
     orbit = new MapControls(camera, canvas)
     orbit.enableDamping = true
     orbit.dampingFactor = 0.05
+    orbit.zoomSpeed = 0.8
     orbit.screenSpacePanning = false
+    orbit.enablePan = false
     orbit.minDistance = 1
     orbit.maxDistance = 16384
     orbit.minPolarAngle = 0
-    orbit.maxPolarAngle = Math.PI
+    orbit.maxPolarAngle = Math.PI / 2
+    orbit.minAzimuthAngle = Math.PI / 2
+    orbit.maxAzimuthAngle = Math.PI / 2
 
-    orbit.addEventListener('end', () => {
-        springingBack = true
-        springPosVel.set(0, 0, 0)
-        springTargetVel.set(0, 0, 0)
-    })
+    canvas.addEventListener('pointerdown', () => { pointerWasDown = true })
+    orbit.addEventListener('start', cancelSpringBackSchedule)
+    orbit.addEventListener('end', scheduleSpringBack)
 
     pipeline = createRenderPipeline(canvas, scene, camera)
     renderer = pipeline.renderer
@@ -71,7 +105,10 @@ function render() {
     } else if (springingBack) {
         const done = updateSpring(dt, orbit, camera, springPosVel, springTargetVel)
         if (done) {
+            orbit.enableDamping = false
+            orbit.update()
             orbit.reset()
+            orbit.enableDamping = true
             springingBack = false
         }
     } else {

@@ -11,14 +11,17 @@ export class Haze {
     constructor(position) {
         this.position = position
         this.obj = null
+        this._currentOpacity = null
     }
 
     updateScale(camera) {
         const worldPos = new THREE.Vector3()
         this.obj?.getWorldPosition(worldPos)
         let dist = worldPos.distanceTo(camera.position) / STAR_DISTANCE_SCALE
-        this.obj.material.opacity = clamp(HAZE_OPACITY * Math.pow(dist / HAZE_DISTANCE_SCALE, 2), 0, HAZE_OPACITY)
-        this.obj.material.needsUpdate = true
+        const targetOpacity = clamp(HAZE_OPACITY * Math.pow(dist / HAZE_DISTANCE_SCALE, 2), 0, HAZE_OPACITY)
+        if (this._currentOpacity === null) this._currentOpacity = targetOpacity
+        this._currentOpacity += (targetOpacity - this._currentOpacity) * 0.2
+        this.obj.material.opacity = this._currentOpacity
     }
 
     toThreeObject(scene) {

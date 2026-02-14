@@ -12,6 +12,7 @@ export class Star {
         this.position = position
         this.starType = this.generateStarType()
         this.obj = null
+        this._currentScale = null
     }
 
     generateStarType() {
@@ -31,10 +32,13 @@ export class Star {
         this.obj?.getWorldPosition(worldPos)
         let dist = worldPos.distanceTo(camera.position) / STAR_DISTANCE_SCALE
 
-        // update star size
-        let starSize = dist * starTypes.size[this.starType]
-        starSize = clamp(starSize, STAR_MIN, STAR_MAX)
-        this.obj?.scale.copy(new THREE.Vector3(starSize, starSize, starSize))
+        let targetSize = dist * starTypes.size[this.starType]
+        targetSize = clamp(targetSize, STAR_MIN, STAR_MAX)
+
+        if (this._currentScale === null) this._currentScale = targetSize
+        this._currentScale += (targetSize - this._currentScale) * 0.2
+
+        this.obj?.scale.set(this._currentScale, this._currentScale, this._currentScale)
     }
 
     toThreeObject(scene) {
