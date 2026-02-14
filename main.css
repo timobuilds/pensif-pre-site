@@ -50,28 +50,6 @@ body {
   flex-shrink: 0;
 }
 
-.shadow-plane {
-  position: absolute;
-  width: 360px;
-  height: 120px;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 0, 0, 0.12) 0%,
-    rgba(0, 0, 0, 0.06) 35%,
-    transparent 65%
-  );
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.folder-container:hover .shadow-plane {
-  opacity: 0.7;
-}
-
 .canvas-box {
   position: absolute;
   top: 0;
