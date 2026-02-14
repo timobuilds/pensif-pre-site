@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Context is currency</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="pensif-logo.svg" type="image/svg+xml">
+        <link rel="stylesheet" href="main.css">
+
+        <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+        <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.150.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.150.0/examples/jsm/"
+            }
+        }
+        </script>
+    </head>
+    <body>
+        <svg width="0" height="0" aria-hidden="true">
+            <defs>
+                <clipPath id="folderClip" clipPathUnits="objectBoundingBox">
+                    <path transform="scale(0.005039, 0.005669) translate(1.33622, 0.228852)" d="M23.098 0.297519C26.6722 -0.228852 68.0958 0.0173483 70.0953 0.462553C71.6376 0.80585 72.6632 1.80989 73.6912 2.96665C76.0998 5.67696 78 9.20462 80.0415 12.2225C83.5254 17.3716 87.1985 22.405 90.5215 27.6604L146.125 27.7163C155.161 27.7046 165.045 27.4367 174.033 28.0067C177.578 28.4327 180.608 29.5037 183.494 31.4838C197.116 40.8317 194.795 53.6996 194.792 68.4945L194.795 103.58L194.799 136.981C194.797 148.556 196.683 161.219 186.768 169.397C182.04 173.297 178.303 174.912 172.246 175.689C160.674 176.077 147.789 175.844 136.144 175.849L73.8858 175.863L40.6256 175.873C34.3381 175.875 27.0496 176.159 20.9141 175.432C10.5295 174.046 0.829354 164.646 0.279772 153.992C-0.136094 145.931 0.0339816 137.877 0.0366859 129.86L0.0511057 84.2458L0.0336781 43.3944C0.0327768 41.0238 -0.0222099 38.5945 0.0312757 36.2515C0.247622 26.7562 -1.33622 17.2899 5.36842 9.4962C10.5508 3.47227 15.293 1.04274 23.098 0.297519Z"/>
+                </clipPath>
+            </defs>
+        </svg>
+        <div class="folder-container">
+            <div class="galaxy-wrapper">
+                <div class="canvas-box"></div>
+                <canvas id="canvas" width="254" height="229" data-engine="three.js r146"></canvas>
+            </div>
+            <div class="shadow-plane" aria-hidden="true"></div>
+        </div>
+        <script src="main.js" type="module" async defer></script>
+    </body>
+</html>
